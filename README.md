@@ -1,2 +1,2 @@
 # groupShoppingAid
-Angular project for aid in group shopping
+Vue project for aid in group shopping
