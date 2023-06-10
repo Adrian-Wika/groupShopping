@@ -1,5 +1,6 @@
 <template>
-  <Tutorial />
+  <div>123</div>
+  <!-- <Tutorial /> -->
 </template>
 
 <script lang="ts">
