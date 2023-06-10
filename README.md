@@ -1,2 +1,2 @@
 # groupShoppingAid
-Vue project for aid in group shopping
+Nuxt 2 project for aid in group shopping
