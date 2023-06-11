@@ -5,5 +5,6 @@ import TheWelcome from '../components/TheWelcome.vue'
 <template>
   <main>
     <TheWelcome />
+    <!-- <button type="button" class="btn btn-primary">Primary</button> -->
   </main>
 </template>
