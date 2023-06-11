@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SocialBar from '../components/SocialBar.vue'
+</script>
 
 <template>
   <main>
@@ -100,6 +102,9 @@
       </div>
     </div>
   </main>
+  <footer>
+    <SocialBar />
+  </footer>
 </template>
 
 <style>
@@ -108,6 +113,10 @@ main {
   flex-direction: row;
   align-items: center;
   min-height: 70vh;
+}
+
+footer {
+  margin-top: 4%;
 }
 
 #leftSection {

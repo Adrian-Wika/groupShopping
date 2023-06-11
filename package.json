@@ -15,6 +15,7 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.0",
     "vue": "^3.3.4",
+    "vue-github-button": "^3.1.0",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
