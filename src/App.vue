@@ -1,5 +1,16 @@
 <script setup lang="ts">
+import { collection, getDocs } from 'firebase/firestore'
 import { RouterLink, RouterView } from 'vue-router'
+import { firestoreDB } from './firebase/firebaseConfig.js'
+import { onMounted } from 'vue'
+
+onMounted(async () => {
+  const querySnapshot = await getDocs(collection(firestoreDB, 'test'))
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, ' => ', doc.data())
+  })
+})
 </script>
 
 <template>
