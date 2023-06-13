@@ -4,6 +4,8 @@ import { RouterLink, RouterView } from 'vue-router'
 import { firestoreDB } from './firebase/firebaseConfig.js'
 import { onMounted } from 'vue'
 
+const authorized = false
+
 onMounted(async () => {
   const querySnapshot = await getDocs(collection(firestoreDB, 'test'))
   querySnapshot.forEach((doc) => {
@@ -17,7 +19,7 @@ onMounted(async () => {
   <div class="context">
     <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #031633">
       <div class="container-fluid" id="spacer">
-        <a class="navbar-brand" href="#">
+        <RouterLink class="navbar-brand" to="/">
           <img
             src="/favicon.ico"
             alt="Logo"
@@ -26,7 +28,7 @@ onMounted(async () => {
             class="d-inline-block align-text-top"
           />
           Group Shopping App
-        </a>
+        </RouterLink>
 
         <button
           class="navbar-toggler"
@@ -41,16 +43,13 @@ onMounted(async () => {
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav" id="navbarItems">
-            <li class="nav-item">
-              <RouterLink class="nav-link active" to="/">Strona główna</RouterLink>
-            </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="authorized">
               <RouterLink class="nav-link" to="/">Grupy zakupowe</RouterLink>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="authorized">
               <RouterLink class="nav-link" to="/">Moja strefa</RouterLink>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" v-if="authorized">
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
@@ -60,7 +59,7 @@ onMounted(async () => {
               >
                 <img
                   src="https://fastly.picsum.photos/id/279/1920/1080.jpg?hmac=C8zPgdG1vyFSEXKiwZls3F3j_-OKLvNa0QUQ8UZ-8NU"
-                  alt="Logo"
+                  alt="Profile picture"
                   width="35"
                   height="30"
                   class="d-inline-block align-text-top"
@@ -73,6 +72,19 @@ onMounted(async () => {
                 <li><RouterLink class="dropdown-item" to="/about">Ustawienia</RouterLink></li>
                 <li><RouterLink class="dropdown-item" to="/">Wyloguj</RouterLink></li>
               </ul>
+            </li>
+
+            <li class="nav-item" v-if="!authorized">
+              <RouterLink class="nav-link" to="/login"
+                ><button class="btn btn-outline-primary btn-sm" type="submit">
+                  Zaloguj
+                </button></RouterLink
+              >
+            </li>
+            <li class="nav-item" v-if="!authorized">
+              <RouterLink class="nav-link" to="/regster">
+                <button class="btn btn-outline-secondary btn-sm" type="submit">Zarejestruj</button>
+              </RouterLink>
             </li>
           </ul>
         </div>
@@ -103,8 +115,8 @@ onMounted(async () => {
 }
 
 .vertcalSpacer {
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 6%;
+  padding-bottom: 3%;
   min-height: 100vh;
 }
 
