@@ -78,6 +78,7 @@ onMounted(async () => {
         </div>
       </div>
     </nav>
+    <div id="spacer" class="vertcalSpacer"><RouterView /></div>
     <div class="area">
       <ul class="circles">
         <li></li>
@@ -92,7 +93,6 @@ onMounted(async () => {
         <li></li>
       </ul>
     </div>
-    <div id="spacer" class="vertcalSpacer"><RouterView /></div>
   </div>
 </template>
 
