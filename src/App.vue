@@ -23,8 +23,8 @@ onMounted(async () => {
           <img
             src="/favicon.ico"
             alt="Logo"
-            width="30"
-            height="24"
+            width="40"
+            height="44"
             class="d-inline-block align-text-top"
           />
           Group Shopping App

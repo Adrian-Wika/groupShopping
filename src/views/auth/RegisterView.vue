@@ -2,33 +2,36 @@
 import { firestoreDB } from '@/firebase/firebaseConfig'
 import { doc, setDoc } from '@firebase/firestore'
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { ref } from 'vue'
 
-function signUserUp(email: string, password: string) {
-  const auth = getAuth()
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      setDoc(doc(firestoreDB, 'users', userCredential.user.uid), {
-        email: userCredential.user.email
-      })
+function signUserUp() {
+  const name_input = ref('')
+  console.log(name_input)
+  // const auth = getAuth()
+  // createUserWithEmailAndPassword(auth, email, password)
+  //   .then((userCredential) => {
+  //     setDoc(doc(firestoreDB, 'users', userCredential.user.uid), {
+  //       email: userCredential.user.email
+  //     })
 
-      console.info('Utworzono konto & zalogowano')
-    })
-    .catch((error) => {
-      console.error(error.message)
-      console.error(error.code)
-    })
+  //     console.info('Utworzono konto & zalogowano')
+  //   })
+  //   .catch((error) => {
+  //     console.error(error.message)
+  //     console.error(error.code)
+  //   })
 }
 </script>
 
 <template>
   <div class="main">
     <div class="border">
-      <form class="form needs-validation" novalidate>
+      <form class="form needs-validation" @submit.prevent="signUserUp" novalidate>
         <div class="mb-3">
           <div class="mb-3 d-flex justify-content-between gap-5">
             <div>
               <label for="inputName" class="form-label">Imie</label>
-              <input type="name" class="form-control" id="inputName" />
+              <input type="name" class="form-control" id="inputName" v-model="name_input" />
               <div class="invalid-feedback">Please choose a username.</div>
             </div>
             <div>
