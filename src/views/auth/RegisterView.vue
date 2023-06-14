@@ -1,49 +1,24 @@
-<script setup lang="ts">
-import { firestoreDB } from '@/firebase/firebaseConfig'
-import { doc, setDoc } from '@firebase/firestore'
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { ref } from 'vue'
-
-function signUserUp() {
-  const name_input = ref('')
-  console.log(name_input)
-  // const auth = getAuth()
-  // createUserWithEmailAndPassword(auth, email, password)
-  //   .then((userCredential) => {
-  //     setDoc(doc(firestoreDB, 'users', userCredential.user.uid), {
-  //       email: userCredential.user.email
-  //     })
-
-  //     console.info('Utworzono konto & zalogowano')
-  //   })
-  //   .catch((error) => {
-  //     console.error(error.message)
-  //     console.error(error.code)
-  //   })
-}
-</script>
-
 <template>
   <div class="main">
     <div class="border">
-      <form class="form needs-validation" @submit.prevent="signUserUp" novalidate>
+      <form class="form needs-validation" novalidate @submit.prevent="signUserUp">
         <div class="mb-3">
           <div class="mb-3 d-flex justify-content-between gap-5">
             <div>
               <label for="inputName" class="form-label">Imie</label>
-              <input type="name" class="form-control" id="inputName" v-model="name_input" />
+              <input type="text" class="form-control" id="inputName" v-model="name" />
               <div class="invalid-feedback">Please choose a username.</div>
             </div>
             <div>
               <label for="inputSurname" class="form-label">Nazwisko</label>
-              <input type="surname" class="form-control" id="inputSurname" />
+              <input type="text" class="form-control" id="inputSurname" v-model="surname" />
               <div class="invalid-feedback">Please choose a username.</div>
             </div>
           </div>
           <label for="inputEmail" class="form-label">Adres email</label>
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1"><i class="bi bi-at"></i></span>
-            <input type="email" class="form-control" id="inputEmail" />
+            <input type="email" class="form-control" id="inputEmail" v-model="email" />
             <div class="invalid-feedback">Please choose a username.</div>
           </div>
         </div>
@@ -56,6 +31,7 @@ function signUserUp() {
               class="form-control"
               id="inputPassword"
               aria-describedby="passwordHelp"
+              v-model="password"
             />
             <div class="invalid-feedback">Please choose a username.</div>
           </div>
@@ -86,6 +62,44 @@ function signUserUp() {
     <p>Masz już konto? <RouterLink to="/login">Zaloguj się</RouterLink></p>
   </div>
 </template>
+
+<script lang="ts">
+import { firestoreDB } from '@/firebase/firebaseConfig'
+import { doc, setDoc } from '@firebase/firestore'
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth'
+
+export default {
+  name: 'registerComponent',
+  setup(props) {
+    return props
+  },
+  data() {
+    return {
+      name: '' as string,
+      surname: '' as string,
+      email: '' as string,
+      password: '' as string
+    }
+  },
+  methods: {
+    signUserUp() {
+      const auth = getAuth()
+      createUserWithEmailAndPassword(auth, this.email, this.password)
+        .then((userCredential) => {
+          setDoc(doc(firestoreDB, 'users', userCredential.user.uid), {
+            email: userCredential.user.email
+          })
+
+          console.info('Utworzono konto & zalogowano')
+        })
+        .catch((error) => {
+          console.error(error.message)
+          console.error(error.code)
+        })
+    }
+  }
+}
+</script>
 
 <style scoped>
 .main {
