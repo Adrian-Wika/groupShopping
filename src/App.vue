@@ -1,33 +1,16 @@
-<script setup>
-import { collection, getDocs } from 'firebase/firestore'
-import { RouterLink, RouterView } from 'vue-router'
-import { firestoreDB } from './firebase/firebaseConfig.js'
-import { onMounted } from 'vue'
-
-const authorized = false
-
-onMounted(async () => {
-  const querySnapshot = await getDocs(collection(firestoreDB, 'test'))
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, ' => ', doc.data())
-  })
-})
-</script>
-
 <template>
   <div class="context">
     <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #031633">
       <div class="container-fluid" id="spacer">
-        <RouterLink class="navbar-brand" to="/">
+        <RouterLink class="navbar-brand d-flex gap-3 align-items-center" to="/">
           <img
             src="/favicon.ico"
             alt="Logo"
             width="40"
-            height="44"
+            height="40"
             class="d-inline-block align-text-top"
           />
-          Group Shopping App
+          <p class="m-0">Group Shopping App</p>
         </RouterLink>
 
         <button
@@ -70,7 +53,7 @@ onMounted(async () => {
                 <li><div class="dropdown-item">Adrian Wika</div></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><RouterLink class="dropdown-item" to="/about">Ustawienia</RouterLink></li>
-                <li><RouterLink class="dropdown-item" to="/">Wyloguj</RouterLink></li>
+                <li class="dropdown-item">Wyloguj</li>
               </ul>
             </li>
 
@@ -82,7 +65,7 @@ onMounted(async () => {
               >
             </li>
             <li class="nav-item" v-if="!authorized">
-              <RouterLink class="nav-link" to="/regster">
+              <RouterLink class="nav-link" to="/register">
                 <button class="btn btn-outline-secondary btn-sm" type="submit">Zarejestruj</button>
               </RouterLink>
             </li>
@@ -107,6 +90,58 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
+<script>
+import { initFirebase } from './firebase/firebaseConfig'
+import { getAuth, signOut } from 'firebase/auth'
+
+export default {
+  name: 'mainLayout',
+  data() {
+    return {
+      authorized: false,
+      test: 0
+    }
+  },
+  methods: {
+    logOut() {
+      console.log('logout')
+      const auth = getAuth()
+      signOut(auth)
+        .then(() => {
+          this.authorized = false
+        })
+        .catch((error) => {
+          console.error(error.message)
+        })
+    }
+  },
+  watch: {
+    authorized: {
+      handler() {
+        console.log('Witam', getAuth().currentUser)
+      },
+      immediate: true
+    }
+  },
+  // mounted() {
+  //   setTimeout(() => {
+  //     if (getAuth()?.currentUser !== null) {
+  //       this.authorized = true
+  //     } else {
+  //       this.authorized = false
+  //     }
+  //   }, 350)
+  // },
+  beforeCreate() {
+    if (getAuth()?.currentUser !== null) {
+      this.authorized = true
+    } else {
+      this.authorized = false
+    }
+  }
+}
+</script>
 
 <style scoped>
 #spacer {
