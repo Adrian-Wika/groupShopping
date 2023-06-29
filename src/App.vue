@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import { initFirebase } from './firebase/firebaseConfig'
 import { getAuth, signOut } from 'firebase/auth'
 
 export default {
@@ -100,10 +99,32 @@ export default {
   data() {
     return {
       authorized: false,
-      test: 0
+      watcher: null
+    }
+  },
+  watch: {
+    $data: {
+      handler: function (newvalue) {
+        if (newvalue.authorized) {
+          localStorage.setItem('auth', getAuth()?.currentUser.uid)
+        } else {
+          localStorage.removeItem('auth')
+        }
+      },
+      deep: true
     }
   },
   methods: {
+    authWatcher() {
+      this.watcher = setInterval(() => {
+        console.log('watcher')
+        if (getAuth()?.currentUser !== null) {
+          this.authorized = true
+        } else {
+          this.authorized = false
+        }
+      }, 500)
+    },
     logOut() {
       console.log('logout')
       const auth = getAuth()
@@ -116,29 +137,11 @@ export default {
         })
     }
   },
-  watch: {
-    authorized: {
-      handler() {
-        console.log('Witam', getAuth().currentUser)
-      },
-      immediate: true
-    }
+  mounted() {
+    this.authWatcher()
   },
-  // mounted() {
-  //   setTimeout(() => {
-  //     if (getAuth()?.currentUser !== null) {
-  //       this.authorized = true
-  //     } else {
-  //       this.authorized = false
-  //     }
-  //   }, 350)
-  // },
-  beforeCreate() {
-    if (getAuth()?.currentUser !== null) {
-      this.authorized = true
-    } else {
-      this.authorized = false
-    }
+  beforeUnmount() {
+    clearInterval(this.watcher)
   }
 }
 </script>
